@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+from carregaMatriz import *
+from classifica_centroid import *
+from getMatrizCentroid import *
 import csv
 from random import shuffle
-import math
 import operator
 from copy import deepcopy
 import sys
+
 # from sklearn.metrics import confusion_matrix
 
 #calcula a distancias euclidiana entre dois vetores
@@ -79,26 +82,7 @@ def menor_da_lista(lista):
             menor = lista[i]
     return menor
 
-#carrega a matriz do arquivo e os parse necessários 
-def carrega_matriz(path):
-    arquivo = open(path, 'r')
 
-    matriz = []
-    for line in arquivo:
-        # remove os espaços em branco
-        line = line.replace(" ", '')
-        # quebra linha por ,
-        str_line_split = line.split(',')
-                
-        # faz o cast dos dados lidos de string para float
-        for j in range(len(str_line_split)-1):
-            str_line_split[j] = float(str_line_split[j])
-            j = j + 1
-        # adiciona o vetor na matriz
-        matriz.append(str_line_split)
-        
-    arquivo.close()
-    return matriz
 
 def classificador(matriz_treino, matriz_teste, k):
     classificados = []
@@ -123,19 +107,19 @@ def main():
 
     matriz_treino = []
     matriz_teste = []
-    matriz_treino = carrega_matriz(str(sys.argv[1]))
+    matriz_treino, classes_treino, classes_treino_volta = carrega_matriz_centroid(str(sys.argv[1]))
     matriz_teste = carrega_matriz(str(sys.argv[2]))
 
     qtdeInstancia = len(matriz_teste)
 
     #normaliza todos os dados
-    matriz_treino = normaliza_dados(matriz_treino)
-    matriz_teste = normaliza_dados(matriz_teste)
+    #matriz_treino = normaliza_dados(matriz_treino)
+    #matriz_teste = normaliza_dados(matriz_teste)
 
     #copia 20% da matriz de treinamento
-    matriz_de_treino_20 = deepcopy(matriz_treino[:int(len(matriz_treino)*0.25)])
+    #matriz_de_treino_20 = deepcopy(matriz_treino[:int(len(matriz_treino)*0.25)])
     #copia 50% da matriz de treinamento
-    matriz_de_treino_50 = deepcopy(matriz_treino[:int(len(matriz_treino)*0.50)])
+    #matriz_de_treino_50 = deepcopy(matriz_treino[:int(len(matriz_treino)*0.50)])
 
     # classes = get_classes(matriz_teste)
     # print (classes)
@@ -143,23 +127,24 @@ def main():
     classificados = []
     k = int(sys.argv[3])
 
-    print ("k = %i") % k
+    #print ("k = %i") % k
 
-    print ("\nClassificador para 25% dos dados de treinamento\n")
-    classificados =  classificador(matriz_de_treino_20, matriz_teste, k)
-    taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
-    print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
+    #print ("\nClassificador para 25% dos dados de treinamento\n")
+    #classificados =  classificador(matriz_de_treino_20, matriz_teste, k)
+    #taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
+    #print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
 
     # print (confusion_matrix(matriz_teste, classificados))
 
-    print ("\nClassificador para 50% dos dados de treinamento\n")
-    classificados =  classificador(matriz_de_treino_50, matriz_teste, k)
-    taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
-    print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
+    #print ("\nClassificador para 50% dos dados de treinamento\n")
+    #classificados =  classificador(matriz_de_treino_50, matriz_teste, k)
+    #taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
+    #print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
 
     print ("\nClassificador para 100% dos dados de treinamento\n")
-    classificados =  classificador(matriz_treino, matriz_teste, k)
-    taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
+    matriz_centroid = getMatrizCentroid(matriz_treino, classes_treino,classes_treino_volta)
+    classificados =  classificador_centroid(matriz_centroid, matriz_teste)#, classes_treino, classes_treino_volta)
+    taxa_de_acerto = calcula_taxa_acerto_centroid(matriz_teste, classificados, qtdeInstancia)
     print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
 
     return 0
