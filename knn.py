@@ -5,6 +5,7 @@ import math
 import operator
 from copy import deepcopy
 import sys
+import time
 # from sklearn.metrics import confusion_matrix
 
 #calcula a distancias euclidiana entre dois vetores
@@ -86,9 +87,9 @@ def carrega_matriz(path):
     matriz = []
     for line in arquivo:
         # remove os espaços em branco
-        line = line.replace(" ", '')
+        #line = line.replace(" ", '')
         # quebra linha por ,
-        str_line_split = line.split(',')
+        str_line_split = line.split(' ')
                 
         # faz o cast dos dados lidos de string para float
         for j in range(len(str_line_split)-1):
@@ -132,6 +133,9 @@ def main():
     matriz_treino = normaliza_dados(matriz_treino)
     matriz_teste = normaliza_dados(matriz_teste)
 
+    #print(matriz_teste)
+
+    
     #copia 20% da matriz de treinamento
     matriz_de_treino_20 = deepcopy(matriz_treino[:int(len(matriz_treino)*0.25)])
     #copia 50% da matriz de treinamento
@@ -145,6 +149,7 @@ def main():
 
     print ("k = %i") % k
 
+    '''
     print ("\nClassificador para 25% dos dados de treinamento\n")
     classificados =  classificador(matriz_de_treino_20, matriz_teste, k)
     taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
@@ -156,11 +161,14 @@ def main():
     classificados =  classificador(matriz_de_treino_50, matriz_teste, k)
     taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
     print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
+    '''
 
     print ("\nClassificador para 100% dos dados de treinamento\n")
     classificados =  classificador(matriz_treino, matriz_teste, k)
     taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
     print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
+
+    print(repr(time.time()) + "ms")
 
     return 0
 
