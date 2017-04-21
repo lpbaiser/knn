@@ -82,8 +82,6 @@ def menor_da_lista(lista):
             menor = lista[i]
     return menor
 
-
-
 def classificador(matriz_treino, matriz_teste, k):
     classificados = []
     for i in range(len(matriz_teste)):
@@ -116,6 +114,9 @@ def main():
     #matriz_treino = normaliza_dados(matriz_treino)
     #matriz_teste = normaliza_dados(matriz_teste)
 
+    #print(matriz_teste)
+
+    
     #copia 20% da matriz de treinamento
     #matriz_de_treino_20 = deepcopy(matriz_treino[:int(len(matriz_treino)*0.25)])
     #copia 50% da matriz de treinamento
@@ -141,11 +142,14 @@ def main():
     #taxa_de_acerto = calcula_taxa_acerto(matriz_teste, classificados, qtdeInstancia)
     #print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
 
+
     print ("\nClassificador para 100% dos dados de treinamento\n")
     matriz_centroid = getMatrizCentroid(matriz_treino, classes_treino,classes_treino_volta)
     classificados =  classificador_centroid(matriz_centroid, matriz_teste)#, classes_treino, classes_treino_volta)
     taxa_de_acerto = calcula_taxa_acerto_centroid(matriz_teste, classificados, qtdeInstancia)
     print "taxa_de_acerto: " + repr(taxa_de_acerto) + "%"
+
+    print(repr(time.time()) + "ms")
 
     return 0
 
